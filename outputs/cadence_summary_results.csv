@@ -1,0 +1,9 @@
+analysis,metric,value,pvalue
+PCA trajectory position,Spearman rho with age,0.34361296974010186,2.727908448030402e-18
+PCA trajectory deviation,Spearman rho with age,-0.053198335207834305,0.19020443858572988
+PCA latent age model,MAE,10.709824774645027,
+PCA latent age model,correlation,0.47941559420318836,
+PCA latent age model,R2,0.2298272275869575,
+PLS latent age model,MAE,10.056388396559306,
+PLS latent age model,correlation,0.5384217380125935,
+PLS latent age model,R2,0.28813879412103127,

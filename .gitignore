@@ -1,0 +1,44 @@
+# Raw EEG data
+data/
+data_full_edf/
+data_batches/
+data_batches_edf_only/
+*.edf
+*.bdf
+*.set
+*.fdt
+
+# Large generated files
+features/
+*.pkl
+*.joblib
+*.h5
+*.npy
+*.npz
+
+# Checkpoints and logs
+*checkpoint*.csv
+*failures*.csv
+*.log
+
+# Python / notebook cache
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot

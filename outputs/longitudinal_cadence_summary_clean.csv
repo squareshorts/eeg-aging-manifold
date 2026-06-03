@@ -1,0 +1,5 @@
+analysis,n,mean_delta,median_delta,std_delta,wilcoxon_p,spearman_rho,spearman_p
+Longitudinal trajectory position shift,208,0.40272577532450565,0.5223248266037555,3.178133296074973,0.002021062607726091,,
+Longitudinal trajectory deviation shift,208,0.058976223259639644,0.16120087114529402,1.456253206756081,0.6215767191709265,,
+Baseline position vs future trajectory change,208,,,,,-0.2803950435529383,4.093494599919161e-05
+Chronological age vs future trajectory change,208,,,,,-0.018083036634951425,0.7954448072848598
