@@ -6,3 +6,4 @@ matplotlib
 mne
 tqdm
 openneuro-py
+openpyxl

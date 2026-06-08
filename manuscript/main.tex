@@ -22,7 +22,7 @@
 \maketitle
 
 \begin{abstract}
-Resting-state electroencephalography (EEG) provides a non-invasive and scalable measure of adult brain function, but most brain-aging studies reduce electrophysiological aging to cross-sectional age prediction. Here, we derive and validate a low-dimensional EEG aging manifold from 64-channel resting-state EEG recordings across the adult lifespan. We analyzed OpenNeuro ds005385, containing baseline eyes-closed EEG from 608 healthy adults aged 20--70 years and five-year follow-up recordings from 208 participants. Spectral features were extracted from global and regional EEG power in canonical frequency bands, including absolute power, relative power, theta/alpha and beta/alpha ratios, individual alpha frequency, and aperiodic spectral slope. A ridge-regression EEG brain-age model predicted chronological age with mean absolute error (MAE) of 9.46 years, correlation $r=0.611$, and $R^2=0.371$. Age-associated spectral structure was dominated by increasing relative beta power and decreasing high-alpha power. Principal component analysis showed that the first ten components explained 91.68\% of EEG feature variance, and a two-dimensional aging trajectory based on PC1 and PC4 was significantly associated with chronological age ($\rho=0.344$, $p=2.73\times10^{-18}$). In the longitudinal subset, participants moved significantly forward along the inferred EEG aging trajectory from session 1 to session 2 (mean $\Delta T=0.403$, median $\Delta T=0.522$, Wilcoxon $p=0.0020$), whereas orthogonal deviation from the trajectory did not change ($p=0.622$). Baseline trajectory position predicted future trajectory change ($\rho=-0.280$, $p=4.09\times10^{-5}$), whereas chronological age did not ($\rho=-0.018$, $p=0.795$). These results identify a stable electrophysiological aging manifold whose longitudinal dynamics are not reducible to chronological age.
+Resting-state electroencephalography (EEG) provides a non-invasive and scalable measure of adult brain function, but most brain-aging studies reduce electrophysiological aging to cross-sectional age prediction. Here, we derive and validate a low-dimensional EEG aging manifold from 64-channel resting-state EEG recordings across the adult lifespan. We analyzed OpenNeuro ds005385, containing baseline eyes-closed EEG from 608 healthy adults aged 20--70 years and five-year follow-up recordings from 208 participants. Spectral features were extracted from global and regional EEG power in canonical frequency bands, including absolute power, relative power, theta/alpha and beta/alpha ratios, individual alpha frequency, and aperiodic spectral slope. A ridge-regression EEG brain-age model predicted chronological age with mean absolute error (MAE) of 9.41 years, correlation $r=0.614$, and $R^2=0.376$ under fold-local cross-validation. Age-associated spectral structure was dominated by increasing relative beta power and decreasing high-alpha power. Principal component analysis showed that the first ten components explained 91.68\% of EEG feature variance, and a two-dimensional aging trajectory based on PC1 and PC4 was significantly associated with chronological age ($\rho=0.344$, $p=2.73\times10^{-18}$). In the longitudinal subset, participants moved significantly forward along the inferred EEG aging trajectory from session 1 to session 2 (mean $\Delta T=0.403$, median $\Delta T=0.522$, Wilcoxon $p=0.0020$), whereas orthogonal deviation from the trajectory did not change ($p=0.622$). Baseline trajectory position predicted future trajectory change ($\rho=-0.280$, $p=4.09\times10^{-5}$), whereas chronological age did not ($\rho=-0.018$, $p=0.795$). In independent resting-state EEG validations spanning three external datasets (OpenNeuro ds003775, ds003690, and ds004148), fixed-projection trajectory coordinates preserved external age associations in cohorts with sufficient lifespan variance (e.g., $r=0.346$, $p=0.002$ in ds003690), but transferred ridge age prediction was systematically miscalibrated. These results identify a fixed electrophysiological aging coordinate with longitudinal sensitivity and robust relational geometry, while emphasizing that scalar brain-age transfer across datasets remains limited.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -220,6 +220,17 @@ Change in trajectory deviation was
 
 The longitudinal analysis tested whether follow-up recordings moved along the aging axis and whether they drifted away from that axis. The first question was tested using $\Delta T_i$; the second was tested using $\Delta D_i$.
 
+\subsection{External Validation Datasets and Transfer Protocol}
+
+External validation used three independent public resting-state EEG datasets distributed via OpenNeuro under a CC0 license:
+1) \textbf{OpenNeuro ds003775 (SRM dataset)} \cite{openneuro_ds003775,hatlestad2022bids}: Contains resting-state EEG from healthy control participants aged 17--71 years, recorded with a 64-channel BioSemi system. The prespecified adult subset ($n=100$, age range 20--71 years) was analyzed.
+2) \textbf{OpenNeuro ds003690 (Healthy Aging)} \cite{openneuro_ds003690}: Contains resting-state EEG from $n=75$ young and older healthy adults (age range 19--70 years).
+3) \textbf{OpenNeuro ds004148 (Young Adults)} \cite{openneuro_ds004148}: Contains resting-state eyes-closed EEG from $n=60$ healthy young adults (age range 18--28 years).
+
+The external transfer protocol used the exact 93-feature spectral representation as the ds005385 analysis. All transformation parameters were fitted exclusively on ds005385 session-1 eyes-closed pre-task recordings. These frozen parameters included feature-wise imputation medians, 1st/99th percentile winsorization thresholds, scaler means and standard deviations, PCA loadings, young and old centroids defining the aging axis, the trajectory direction, trajectory-to-age calibration, and ridge-regression coefficients. External features were transformed, projected, and scored without any refitting. PCA was not refitted. The external analysis computed trajectory position $T$, signed lateral position $D_{\mathrm{signed}}$, unsigned distance $D_{\mathrm{abs}}$, $T$-calibrated age prediction, and transferred ridge age prediction. External validation was summarized using Pearson correlation, Spearman correlation, MAE, and $R^2$, with 95\% confidence intervals estimated by participant-level bootstrap resampling.
+
+
+
 \subsection{Statistical Analysis}
 
 Pearson correlation was used for age-prediction performance because predicted and observed age are continuous scalar quantities. Spearman correlation was used for feature-age associations, latent component-age associations, trajectory-age associations, test-retest stability, and longitudinal dynamics because these analyses quantify monotonic relationships that need not be strictly linear. Wilcoxon signed-rank tests assessed whether longitudinal changes in trajectory position and trajectory deviation differed from zero. Feature-level p-values were treated as descriptive screening statistics used to identify dominant spectral contributors; inferential interpretation focused on the predefined brain-age, trajectory-position, trajectory-deviation, and longitudinal-dynamics analyses. Model performance was summarized with MAE, Pearson correlation, and $R^2$.
@@ -228,7 +239,7 @@ Pearson correlation was used for age-prediction performance because predicted an
 
 \subsection{Cohort Characteristics}
 
-The baseline cohort consisted of 608 participants, 376 female and 232 male. Age ranged from 20 to 70 years, with mean age 44.07 years and standard deviation 14.51 years. The longitudinal subset consisted of 208 participants with session-2 eyes-closed pre-task recordings.
+The baseline cohort consisted of 608 participants, 376 female and 232 male. Age ranged from 20 to 70 years, with mean age 44.07 years and standard deviation 14.51 years. The longitudinal subset consisted of 208 participants with session-2 eyes-closed pre-task recordings. Follow-up-subset baseline metadata were complete for age and sex: age ranged from 20 to 70 years, with mean age 47.00 years and standard deviation 13.74 years; 130 participants were female and 78 were male.
 
 \begin{table}[!t]
 \centering
@@ -239,17 +250,19 @@ The baseline cohort consisted of 608 participants, 376 female and 232 male. Age 
 Measure & Baseline & Follow-up subset \\
 \midrule
 Participants & 608 & 208 \\
+Age available, N & 608 & 208 \\
 Age range, years & 20--70 & 20--70 \\
-Mean age, years & 44.07 & -- \\
-Age SD, years & 14.51 & -- \\
-Female & 376 & -- \\
-Male & 232 & -- \\
+Mean age, years & 44.07 & 47.00 \\
+Age SD, years & 14.51 & 13.74 \\
+Sex available, N & 608 & 208 \\
+Female & 376 & 130 \\
+Male & 232 & 78 \\
 EEG condition & Eyes closed, pre-task & Eyes closed, pre-task \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-A consolidated overview of the principal quantitative findings is provided in Table~\ref{tab:main_findings}. Detailed model-level and longitudinal analyses are reported in the following subsections.
+A consolidated overview of the principal quantitative findings is provided in Table~\ref{tab:main_findings}. Development and external validation performance are summarized in Table~\ref{tab:external_validation}. Detailed model-level and longitudinal analyses are reported in the following subsections.
 
 \begin{table*}[!t]
 \centering
@@ -261,9 +274,9 @@ A consolidated overview of the principal quantitative findings is provided in Ta
 Analysis & Metric & Value \\
 \midrule
 Baseline age model & Participants & 608 \\
-Baseline age model & MAE & 9.46 years \\
-Baseline age model & Prediction correlation & 0.611 \\
-Baseline age model & $R^2$ & 0.371 \\
+Baseline age model & MAE & 9.41 years; 95\% CI: 8.88--9.95 \\
+Baseline age model & Prediction correlation & $r=0.614$; 95\% CI: 0.567--0.660 \\
+Baseline age model & $R^2$ & 0.376; 95\% CI: 0.312--0.432 \\
 PCA trajectory & Trajectory position vs. age & $\rho=0.344$, $p=2.73\times10^{-18}$ \\
 PCA trajectory & Trajectory deviation vs. age & $\rho=-0.053$, $p=0.190$ \\
 Test--retest stability & Longitudinal participants & 208 \\
@@ -278,17 +291,35 @@ Dynamics & Chronological age vs. future change & $\rho=-0.018$, $p=0.795$ \\
 \end{tabular}
 \end{table*}
 
+\begin{table*}[!t]
+\centering
+\caption{Development and external validation performance. Confidence intervals are participant-level bootstrap 95\% intervals.}
+\label{tab:external_validation}
+\footnotesize
+\begin{tabular}{p{0.34\textwidth}cp{0.52\textwidth}}
+\toprule
+Dataset and analysis & N & Estimate (95\% bootstrap CI) \\
+\midrule
+Development ds005385 session-1: Fixed $T$ vs. chronological age & 608 & Pearson $r=0.326$ (0.262--0.390); Spearman $\rho=0.344$ (0.272--0.410), $p=2.73\times10^{-18}$ \\
+Development ds005385 session-1: Ridge age prediction, 10-fold CV & 608 & MAE 9.41 years (8.88--9.95); Pearson $r=0.614$ (0.567--0.660); $R^2=0.376$ (0.312--0.432) \\
+External ds003775 adult subset: Fixed $T$ vs. chronological age & 100 & Pearson $r=0.228$ (0.010--0.414), $p=0.0225$; Spearman $\rho=0.112$ (-0.099 to 0.314), $p=0.269$ \\
+External ds003775 adult subset: $T$-calibrated age prediction & 100 & MAE 20.23 years (17.76--22.73); Pearson $r=0.228$ (0.007--0.409); $R^2=-2.363$ (-3.089 to -1.852) \\
+External ds003775 adult subset: transferred ridge age prediction & 100 & MAE 31.36 years (28.78--34.04); Pearson $r=0.205$ (-0.037 to 0.427); $R^2=-5.887$ (-7.794 to -4.579) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
 \subsection{Age-Associated EEG Features}
 
 The strongest age-associated baseline EEG features were relative beta power and high-alpha power. Central relative beta power showed the strongest association with age ($\rho=0.394$), followed by occipital absolute high-alpha power ($\rho=-0.369$), parietal relative beta power ($\rho=0.349$), global absolute high-alpha power ($\rho=-0.327$), and parietal absolute high-alpha power ($\rho=-0.326$). This pattern indicates that the age-associated spectral signature was dominated by increasing beta contribution and decreasing high-alpha contribution.
 
 \subsection{EEG Brain-Age Prediction}
 
-The ridge-regression EEG brain-age model achieved MAE = 9.46 years, prediction correlation $r=0.611$, and $R^2=0.371$ in 10-fold cross-validation. The uncorrected brain-age gap showed strong age bias ($r=-0.754$ with chronological age). Bias correction removed this dependency, yielding corrected gap-age correlation $r\approx0$. PCA and PLS latent age models achieved weaker scalar age prediction than the full EEG feature model, with PCA MAE = 10.71 years and PLS MAE = 10.06 years.
+The ridge-regression EEG brain-age model achieved MAE = 9.41 years (95\% bootstrap CI: 8.88--9.95), prediction correlation $r=0.614$ (95\% CI: 0.567--0.660), and $R^2=0.376$ (95\% CI: 0.312--0.432) in 10-fold fold-local cross-validation. The uncorrected brain-age gap showed strong age bias ($r=-0.757$ with chronological age). Bias correction removed this dependency, yielding corrected gap-age correlation $r\approx0$. PCA and PLS latent age models achieved weaker scalar age prediction than the full EEG feature model, with PCA MAE = 10.71 years and PLS MAE = 10.06 years.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\linewidth]{fig1_brain_age_prediction.pdf}
+\includegraphics[width=\linewidth]{fig1_brain_age_prediction_fold_local.pdf}
 \caption{Chronological age versus predicted EEG age.}
 \label{fig:brainage}
 \end{figure}
@@ -344,35 +375,43 @@ Baseline trajectory position predicted future trajectory change ($\rho=-0.280$, 
 \label{fig:age_future}
 \end{figure}
 
+\subsection{External Validation across Three Datasets}
+
+The fixed-projection transfer protocol was applied to three independent public datasets (OpenNeuro ds003775, ds003690, and ds004148) representing varying age distributions and recording environments. All imputation, winsorization, scaling, PCA loadings, aging-axis centroids, trajectory calibration, and ridge coefficients were loaded directly from the ds005385 session-1 model artifacts and were not refitted on external data.
+
+The trajectory coordinate $T$ maintained external linear associations with chronological age in datasets with sufficient lifespan variance. In ds003690 (Healthy Aging, $n=75$, ages 19--70), external $T$ correlated significantly with chronological age (Pearson $r=0.346$, $p=0.002$; Spearman $\rho=0.475$, $p<0.001$). In ds003775 ($n=100$, ages 20--71), $T$ showed weak linear association ($r=0.228$, $p=0.023$) but non-significant rank association ($\rho=0.112$, $p=0.269$). In ds004148 ($n=60$), which sampled only a narrow range of young adults (ages 18--28), age association was absent ($r=-0.121$, $p=0.355$), as expected when predicting chronological variance within a constrained age band.
+
+Despite geometric preservation of the aging axis in lifespan datasets, scalar age prediction models failed to calibrate externally. $T$-calibrated age estimates and transferred ridge age predictions yielded extreme negative $R^2$ values and large mean absolute errors across all three external datasets (e.g., ridge MAE ranged from 14.1 years in ds003690 to 31.4 years in ds003775). Thus, while the relational geometry (the sequence of spectral changes along the manifold) generalizes partially to new cohorts with broad age ranges, absolute scalar age calibration is highly sensitive to dataset-specific intercepts and does not transfer.
+
 \section{Discussion}
 
-This study identifies a longitudinal EEG aging manifold from resting-state spectral features across the adult lifespan. Four findings establish the value of this representation. First, baseline EEG spectral features predicted chronological age with MAE = 9.46 years and correlation $r=0.611$. Second, age-associated EEG variation was organized in a low-dimensional latent space, with a trajectory coordinate significantly associated with age. Third, the longitudinal subset moved significantly forward along this trajectory while remaining stable in orthogonal deviation. Fourth, baseline trajectory position predicted future movement along the manifold, whereas chronological age did not. This pattern indicates structured progression along a normative electrophysiological aging axis rather than nonspecific recording variability.
+This study identifies a longitudinal EEG aging manifold from resting-state spectral features across the adult lifespan. Five findings establish the value and limits of this representation. First, baseline EEG spectral features predicted chronological age with MAE = 9.41 years and correlation $r=0.614$ under fold-local cross-validation. Second, age-associated EEG variation was organized in a low-dimensional latent space, with a trajectory coordinate significantly associated with age. Third, the longitudinal subset moved significantly forward along this trajectory while remaining stable in orthogonal deviation. Fourth, baseline trajectory position predicted future movement along the manifold, whereas chronological age did not. Fifth, independent external validations across three datasets showed that the trajectory geometry preserved significant age associations in cohorts with sufficient lifespan variance (e.g., ds003690), but absolute scalar brain-age calibration completely failed to generalize. The within-dataset longitudinal results and multi-dataset geometric associations therefore support fixed-coordinate trajectory analysis, whereas the external prediction errors establish that the scalar model is not a dataset-invariant biomarker.
 
 The spectral signature of aging was biologically coherent. Relative beta power increased with age, whereas high-alpha power decreased. Alpha rhythms are among the most reproducible features of resting EEG and are strongly linked to thalamocortical and cortico-cortical dynamics \cite{klimesch1999eeg,haegens2014alpha,mierau2017state,nunez2006electric}. Age-related changes in alpha activity, broadband spectral structure, and aperiodic electrophysiological activity have been repeatedly associated with adult aging \cite{dustman1993eeg,voytek2015age,donoghue2020parameterizing,gao2017inferring,he2010temporal}. The present results extend this literature by showing that these spectral features form a multivariate trajectory with longitudinal validity.
 
-The distinction between trajectory position and trajectory deviation is central. Trajectory position captures movement along the inferred aging axis. Deviation captures displacement away from that axis. Longitudinally, position increased significantly, whereas deviation did not. This dissociation supports the interpretation that follow-up change reflects progression along a normative aging manifold, not random drift away from the manifold.
+The distinction between trajectory position and trajectory deviation is central. Trajectory position captures movement along the inferred aging axis. Deviation captures displacement away from that axis. Longitudinally, position increased significantly, whereas deviation did not. This dissociation supports the interpretation that follow-up change within ds005385 reflects progression along a normative aging coordinate, not random drift away from that coordinate. 
+
+When evaluating these findings across datasets, it is critical to separate transferable latent geometry, transferable age association, and non-transferable age calibration. The latent geometry (the sequence of spectral changes) may generalize relatively well because the underlying neurophysiological shifts—such as increasing beta and decreasing alpha—are robust phenomena across human populations. The age association transfers to a lesser degree, as evidenced by the weak linear correlation in the external dataset, likely because different datasets span different age distributions with unique sampling biases. Finally, absolute age calibration is generally non-transferable; differences in amplifiers, reference schemes, and environmental noise uniquely shift the scalar intercept of each dataset. This framework explains why derived scalar predictions, like brain-age gaps, perform poorly on independent data without dataset-specific recalibration, while relational geometry may prove more resilient.
 
 The most informative result was that baseline trajectory position predicted future trajectory change while chronological age did not. This establishes that the EEG trajectory coordinate contains prospective information not reducible to calendar age. Participants already farther along the trajectory changed less over follow-up, consistent with convergence toward a bounded electrophysiological aging manifold. This behavior resembles a dynamical system in which the state coordinate carries information about subsequent evolution.
 
 These findings also clarify the role of brain-age prediction. The ridge model achieved the strongest scalar age prediction, but the PCA and PLS latent models provided interpretability by revealing the geometry of aging-related spectral change. The brain-age model and the trajectory model therefore serve different purposes: the former estimates age, whereas the latter describes how EEG states are organized and how they change longitudinally.
 
-Several methodological boundaries define the interpretation of the present results. The analysis used one public EEG dataset, eyes-closed resting-state recordings, and scalp-level spectral summaries rather than source-localized neural generators. Longitudinal age metadata did not vary across sessions in the available participant table, so the longitudinal analysis quantified electrophysiological trajectory displacement rather than estimating change per chronological year. External cohort replication and source-resolved modeling are direct extensions of the present framework.
+Several methodological boundaries define the interpretation of the present results. The primary longitudinal analysis used one public EEG dataset, eyes-closed resting-state recordings, and scalp-level spectral summaries rather than source-localized neural generators. Longitudinal age metadata did not vary across sessions in the available participant table, so the longitudinal analysis quantified electrophysiological trajectory displacement rather than estimating change per chronological year. The SRM external validation was independent and montage-compatible, but it differed in cohort structure, age distribution, recording duration, equipment, and acquisition context. These differences likely contributed to weak external calibration. Additional external cohorts, harmonization analyses, source-resolved modeling, and connectivity-informed features are direct extensions of the present framework.
 
 \section{Conclusion}
 
-Resting-state EEG contains a stable, low-dimensional aging manifold. Baseline spectral features predict chronological age, and longitudinal recordings show significant forward movement along the inferred aging trajectory without increased orthogonal deviation. Baseline trajectory position predicts future trajectory movement, whereas chronological age does not. This establishes EEG trajectory position as a prospective electrophysiological marker of adult brain aging.
+Resting-state EEG contains a low-dimensional aging coordinate with within-dataset longitudinal sensitivity. Baseline spectral features predict chronological age, and longitudinal recordings show significant forward movement along the inferred aging trajectory without increased orthogonal deviation. Baseline trajectory position predicts future trajectory movement, whereas chronological age does not. Independent validations across three external datasets demonstrated that relational trajectory geometry preserves age associations in cohorts with broad age ranges, but transferred scalar brain-age prediction fails to calibrate. The framework is therefore useful as a reproducible fixed-projection geometry of electrophysiological aging, while absolute scalar prediction requires dataset-specific recalibration.
 
 \section*{Data Availability}
 
-The EEG data analyzed in this study are publicly available from OpenNeuro as dataset ds005385, version 1.0.3, with DOI 10.18112/openneuro.ds005385.v1.0.3 \cite{openneuro_ds005385}. The dataset descriptor is available in \textit{Scientific Data} \cite{getzmann2024resting}. Derived feature tables and summary statistics will be deposited with the analysis code or released as supplementary material where journal policy permits.
+The development EEG data analyzed in this study are publicly available from OpenNeuro as dataset ds005385 \cite{openneuro_ds005385,getzmann2024resting}. External validation datasets are publicly available from OpenNeuro as ds003775 \cite{openneuro_ds003775,hatlestad2022bids}, ds003690 \cite{openneuro_ds003690}, and ds004148 \cite{openneuro_ds004148}. Derived feature tables, frozen model parameters, validation outputs, and summary statistics will be released as supplementary material.
 
-\section*{Code Availability}
-
-The analysis code, including EEG feature extraction, model fitting, trajectory projection, longitudinal analyses, and figure generation, is available at \url{https://github.com/squareshorts/eeg-aging-manifold}.
+The analysis code, including EEG feature extraction, fold-local age-prediction benchmarking, fixed-projection trajectory estimation, longitudinal analyses, Oldham and reliability-null analyses, robustness analyses, and figure generation, is available at \url{https://github.com/squareshorts/eeg-aging-manifold}.
 
 \section*{Acknowledgment}
 
-The author acknowledges the contributors of OpenNeuro dataset ds005385 and the Scientific Data descriptor describing the Dortmund Vital Study resting-state EEG resource.
+The author acknowledges the contributors of OpenNeuro dataset ds005385 and the Scientific Data descriptor describing the Dortmund Vital Study resting-state EEG resource, as well as the contributors of OpenNeuro dataset ds003775 and the SRM Resting-state EEG descriptor.
 
 \section*{Funding Information}
 

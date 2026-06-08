@@ -1,45 +1,149 @@
 # EEG Aging Manifold
 
-This repository contains code, manuscript materials, figures, and derived summary outputs for a longitudinal resting-state EEG aging manifold analysis.
+This repository contains the manuscript, reproducible scripts, frozen model
+artifacts, and generated tables for a longitudinal resting-state EEG aging
+trajectory analysis.
 
-## Dataset
+## Datasets
 
-Raw EEG data are publicly available from OpenNeuro:
+Development dataset:
 
-- Dataset: ds005385
-- DOI: 10.18112/openneuro.ds005385.v1.0.3
-- Descriptor: Getzmann et al., Scientific Data, 2024
+- OpenNeuro `ds005385`, version 1.0.3
+- DOI: <https://doi.org/10.18112/openneuro.ds005385.v1.0.3>
+- Baseline model fitting uses session-1 eyes-closed pre-task EEG only.
 
-Raw EDF files are not included in this repository.
+External validation dataset:
 
-## Main analyses
+- OpenNeuro `ds003775`, SRM Resting-state EEG, version 1.2.1
+- DOI: <https://doi.org/10.18112/openneuro.ds003775.v1.2.1>
+- Descriptor DOI: <https://doi.org/10.1016/j.dib.2022.108647>
+- External validation uses first-session eyes-closed resting EEG in the adult
+  subset age 20 years or older.
 
-The workflow estimates:
+Raw EEG data are not committed. See `data/README.md` and
+`scripts/00_download_or_link_data.md` for download and placement instructions.
 
-1. EEG spectral features from eyes-closed resting-state recordings.
-2. EEG brain-age prediction using ridge regression.
-3. PCA and PLS latent aging representations.
-4. A low-dimensional EEG aging trajectory.
-5. Test-retest feature stability.
-6. Longitudinal trajectory displacement.
-7. Baseline trajectory position as a predictor of future trajectory change.
+## Repository Structure
 
-## Repository structure
+- `data/` - data-access notes plus ignored local raw/derived data locations.
+- `notebooks/` - exploratory notebook retained for provenance.
+- `scripts/` - numbered reproducibility pipeline.
+- `src/eeg_age/` - reusable feature, modeling, trajectory, stats, and plotting code.
+- `results/models/` - versioned frozen development model parameters.
+- `results/features/` - derived external feature table used for validation.
+- `results/projections/` - fixed-projection coordinates.
+- `results/tables/` - CSV tables regenerated from scripts.
+- `figures/` - regenerated external-validation figures.
+- `tables/` - LaTeX table fragments for the manuscript.
+- `manuscript/` - LaTeX manuscript and publication figures.
+- `outputs/` - existing ds005385-derived feature tables and legacy outputs.
+- `robustness_outputs/` - previously generated robustness analyses.
 
-notebooks/              Colab notebook for the full analysis
-manuscript/             LaTeX manuscript and references
-manuscript/figures/     Final manuscript figures
-outputs/                Small derived summary CSV files
-src/                    Optional reusable Python modules
+## Environment
 
-## Reproducibility
+Using pip:
 
-Run the notebook in `notebooks/` using Google Colab. The notebook is configured to use OpenNeuro ds005385 as the raw data source and to avoid storing raw EEG files in this repository.
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
-## Data policy
+Using conda:
 
-This repository does not store raw EEG data. Users should download the dataset directly from OpenNeuro.
+```powershell
+conda env create -f environment.yml
+conda activate eeg-aging-manifold
+```
 
-## Citation
+## Exact Run Order
 
-If using this repository, cite the manuscript and the OpenNeuro dataset ds005385.
+Run from the repository root.
+
+1. Download or link raw data as described in:
+
+```powershell
+Get-Content scripts\00_download_or_link_data.md
+```
+
+2. If regenerating ds005385 features from raw EDF files:
+
+```powershell
+python scripts\01_extract_features.py --dataset ds005385 --session ses-1
+python scripts\01_extract_features.py --dataset ds005385 --session ses-2
+```
+
+The repository already includes the ds005385-derived feature tables under
+`outputs/`, so this step is optional unless starting from raw data.
+
+3. Fit frozen development parameters from ds005385 session-1:
+
+```powershell
+python scripts\02_train_development_models.py
+```
+
+4. Project ds005385 session-2 follow-up recordings without refitting:
+
+```powershell
+python scripts\03_project_followup.py
+```
+
+5. Extract SRM external-validation features:
+
+```powershell
+python scripts\01_extract_features.py --dataset ds003775 --force
+```
+
+6. Run external validation with frozen ds005385 parameters:
+
+```powershell
+python scripts\04_external_validation.py
+```
+
+7. Regenerate figures and tables:
+
+```powershell
+python scripts\05_make_figures.py
+python scripts\06_make_tables.py
+```
+
+8. Run reproducibility sanity checks:
+
+```powershell
+python scripts\07_sanity_checks.py
+```
+
+## Frozen Model Artifacts
+
+`scripts/02_train_development_models.py` saves the following under
+`results/models/ds005385_ses1_v1/`:
+
+- `feature_list.json`
+- `feature_transform_params.csv`
+- `pca_loadings.csv`
+- `pca_params.json`
+- `trajectory_params.json`
+- `trajectory_age_calibration.json`
+- `ridge_coefficients.csv`
+- `ridge_params.json`
+- `manifest.json`
+
+External validation loads these files directly. PCA, scaling, trajectory
+centroids, and ridge coefficients are never refit on session-2 or external data.
+
+## Current External Validation Summary
+
+The independent SRM ds003775 adult subset contained 100 participants aged 20-71
+years. The fixed-projection coordinate showed weak external linear association
+with chronological age (Pearson `r=0.228`, 95% bootstrap CI `0.010-0.414`),
+but the rank association was not significant (Spearman `rho=0.112`, 95% CI
+`-0.099 to 0.314`, `p=0.269`). The transferred ridge brain-age model did not
+generalize as a calibrated predictor (MAE `31.36` years, negative `R2`).
+
+## Key Generated Tables
+
+- `tables/cohort_summary.tex`
+- `results/tables/cohort_summary.csv`
+- `tables/development_external_performance.tex`
+- `results/tables/development_external_performance.csv`
+- `results/tables/reproducibility_sanity_checks.csv`

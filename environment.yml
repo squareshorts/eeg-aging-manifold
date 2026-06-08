@@ -1,0 +1,16 @@
+name: eeg-aging-manifold
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - mne
+  - tqdm
+  - openpyxl
+  - pip
+  - pip:
+      - openneuro-py

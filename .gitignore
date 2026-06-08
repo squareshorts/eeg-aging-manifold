@@ -1,5 +1,12 @@
 # Raw EEG data
-data/
+data/*
+!data/README.md
+!data/external/
+data/external/*
+!data/external/.gitkeep
+!data/derived/
+data/derived/*
+!data/derived/.gitkeep
 data_full_edf/
 data_batches/
 data_batches_edf_only/

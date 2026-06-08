@@ -1,0 +1,35 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\title{Supplementary Material: A Longitudinal EEG Aging Manifold Derived From Resting-State Spectral Dynamics Across the Adult Lifespan}
+
+\author{Antonio Pereira,~\IEEEmembership{Member,~IEEE}}
+
+\maketitle
+
+\section{Exploratory Cognitive Associations}
+
+To test whether the EEG aging trajectory coordinate $T$ captures behavioral or cognitive variance independent of chronological age, an exploratory cognitive analysis was conducted in the external dataset (OpenNeuro ds003775).
+
+\subsection{Methods}
+Available cognitive variables were grouped into four \textit{a priori} domains:
+\begin{enumerate}
+    \item \textbf{Verbal Memory}: Rey Auditory Verbal Learning Test (RAVLT) variables.
+    \item \textbf{Working Memory / Attention}: Digit Span variables.
+    \item \textbf{Executive Function / Processing Speed}: Trail Making Test and Color-Word Interference variables.
+    \item \textbf{Verbal Fluency}: Fluency variables.
+\end{enumerate}
+
+Reaction times and error measures were reverse-coded such that higher values indicated better performance. Variables were z-scored and averaged within domains, requiring at least 50\% non-missing data per composite. For each composite, an extended linear model ($\text{Composite} \sim \text{Age} + \text{Sex} + T$) was compared to a baseline model ($\text{Composite} \sim \text{Age} + \text{Sex}$) using a nested F-test. Sensitivity analyses were performed using HC3 robust standard errors, exclusion of highly influential points (Cook's distance $> 4/N$), and Spearman partial correlation. To strictly control for multiple comparisons, $p$-values were adjusted across the four domains using the Benjamini-Hochberg false discovery rate (FDR) procedure.
+
+\subsection{Results}
+While nominal, uncorrected associations were observed for executive function ($\Delta R^2 = 0.038$, uncorrected $p = 0.037$) and verbal memory ($\Delta R^2 = 0.030$, uncorrected $p = 0.062$), no composite survived false discovery rate (FDR) correction (all FDR-adjusted $p \ge 0.12$). Sensitivity analyses using HC3 robust standard errors, influential-point exclusion, and partial Spearman correlation yielded directionally consistent results but did not alter the multiple-comparison outcome. Thus, while there is exploratory nominal evidence for an association with executive function, the current fixed-projection $T$ did not reliably explain cognitive variance beyond chronological age and sex after strict correction.
+
+\end{document}
